@@ -1,5 +1,5 @@
-%include "include/gdt32.asm"
-%include "include/gdt64.asm"
+%include "src/bootloader/gdt32.inc"
+%include "src/bootloader/gdt64.inc"
 
 section .stage2
 

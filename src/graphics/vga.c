@@ -1,13 +1,4 @@
-#define VGA_COLUMNS_NUM 80
-#define VGA_ROWS_NUM 25
-
-typedef struct
-{
-  int x;
-  int y;
-  const char* text;
-  char color;
-} vga_text_input;
+#include "vga.h"
 
 void vga_put(vga_text_input* input) {
   volatile char *vga_buf = (char *)0xb8000;

@@ -67,8 +67,6 @@ dap_sectors_num:
 	dw SECTORS_LOAD_COUNT ; number of sectors to read
 	dd 0x7c00 + 512 ; right after our bootsector
 	dq 1 ; sector to start at (skip the bootsector)
-	
-
 
 
 drive_number: db 0
