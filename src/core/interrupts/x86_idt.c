@@ -1,6 +1,6 @@
-#include "../include/stdint.h"
-#include "../include/hal.h"
-#include "graphics/vga.h"
+#include "../stdint.h"
+#include "../hal.h"
+#include "../graphics/vga.h"
 
 #pragma pack (push, 1)
 
@@ -9,7 +9,8 @@ typedef struct
     uint16_t limit;
     uint64_t base;
 } idtr;
- 
+
+extern void irqCallHandler();
 
 #pragma pack (pop)
 
@@ -27,11 +28,11 @@ static void idt_install() {
 
 void default_handler()  {
 	const char msg[] = "DEFAULT INTERRUPT HANDLER";
-
 }
 
-void get_interrupt() {    
-    asm volatile( "int $0xc0");
+void systemCall(int sysCallNo, void* ptr)
+{
+    asm volatile( "int $0xc0" :: "a"(sysCallNo), "c"(ptr) : "memory" );
 }
 
 void sysCallC(uint64_t syscall_no, void* ptr) {
@@ -49,14 +50,11 @@ void sysCallC(uint64_t syscall_no, void* ptr) {
     vga_put(&input);
 }
 
-int i86_install_ir(uint8_t index, idt_descriptor descriptor){
+void i86_install_ir(uint8_t index, idt_descriptor descriptor){
     _idt[index] = descriptor;
-    return 0;
 }
 
-extern void irqCallHandler();
-
-int setup_idt(){
+int init_idt(){
     _idtr.limit = sizeof(idt_descriptor) * 256 -1;
     _idtr.base = (uint64_t)&_idt[0];
 
@@ -65,7 +63,6 @@ int setup_idt(){
     }
 
     idt_install();
-    get_interrupt();
-
+    
     return 0;    
 }

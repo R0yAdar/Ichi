@@ -1,4 +1,5 @@
 global irqCallHandler
+
 [bits 64]
 align 16
 

@@ -74,4 +74,4 @@ startup_message: db "Starting up - Ichi...", 0
 error_reading_disk_msg: db "Error: failed to read disk with 0x13/ah=0x42", 13, 10, 0
 
 
-SECTORS_LOAD_COUNT equ 64
+SECTORS_LOAD_COUNT equ 128

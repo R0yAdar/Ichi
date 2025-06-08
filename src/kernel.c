@@ -1,5 +1,5 @@
-#include "graphics/vga.h"
-#include "idt.h"
+#include "core/graphics/vga.h"
+#include "core/interrupts/idt.h"
 
 #define ARRAY_SIZE(arr) ((int)sizeof(arr) / (int)sizeof((arr)[0]))
 
@@ -22,5 +22,7 @@ void _start_kernel(void) {
 	input.color = 0x17;
  
 	vga_put(&input);
-	setup_idt();
+	init_idt();
+
+	systemCall(0, 0);
 }

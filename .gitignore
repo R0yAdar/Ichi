@@ -1,5 +1,5 @@
 build/
-
+.*/*
 
 # Prerequisites
 *.d

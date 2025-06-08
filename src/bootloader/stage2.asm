@@ -9,7 +9,7 @@ mov bx, stage2_msg
 call print_string
 
 ;; load gdt
-cli 
+cli ; disable hardware interrupts 
 lgdt [gdt32_pseudo_descriptor]
 
 mov eax, cr0
@@ -42,6 +42,7 @@ print_string_end:
 
 start_prot_mode:
 
+mov esp, stack_top
 
 mov ax, DATA_SEG32
 mov ds, ax
@@ -218,6 +219,9 @@ build_page_table:
 
 [bits 64]
 start_long_mode:
+	mov rsp, stack_top
+	and rsp, 0xFFFFFFFFFFFFFFF0  ; align to 16 bytes
+
 	; resolved when linking with kernel.c
 	extern _start_kernel
 	call _start_kernel
@@ -229,3 +233,8 @@ stage2_msg: db "Hello from stage 2", 13, 10, 0
 stage2_protected_msg: db "Hello from protected mode!", 13, 10, 0
 a20_msg: db "Enabled A20 line!", 13, 10, 0
 comp_mode_msg: db "Ichi entered 64 bit compatability mode", 0
+
+section .bss
+align 16
+stack_bottom: resb 0x4000    ; 16KB
+stack_top:
