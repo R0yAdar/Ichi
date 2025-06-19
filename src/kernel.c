@@ -25,4 +25,9 @@ void _start_kernel(void) {
 	init_idt();
 
 	systemCall(0, 0);
+
+	volatile int a = 5;
+
+	int b = a / 1;
+
 }
