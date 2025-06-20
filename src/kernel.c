@@ -1,5 +1,7 @@
 #include "core/graphics/vga.h"
 #include "core/interrupts/idt.h"
+#include "core/interrupts/x86_pic.h"
+
 
 #define ARRAY_SIZE(arr) ((int)sizeof(arr) / (int)sizeof((arr)[0]))
 
@@ -10,16 +12,16 @@
 */
 
 void _start_kernel(void) {
-	const char msg[] = "Hello from Ichi!!!!";
-
-
 	vga_clear_screen();
-	vga_text_input input  = {0, 0, msg, 0x09};
+
+	const char loading_message[] = "Ichi kernel loading...";
+	const char configured_pic_message[] = "Ichi kernel enabled PIC...";
+
+	vga_text_input input  = {0, 0, loading_message, 0x09};
 	vga_put(&input);
-	
-	input.y = 10;
-	input.x = 2;
-	input.color = 0x17;
+
+	input.text = configured_pic_message;
+	++input.y;
  
 	vga_put(&input);
 	init_idt();
@@ -28,6 +30,9 @@ void _start_kernel(void) {
 
 	volatile int a = 5;
 
-	int b = a / 1;
+	// int b = a / 0;
 
+	init_pic();
+	
+	asm volatile ("sti" ::: "memory");
 }
