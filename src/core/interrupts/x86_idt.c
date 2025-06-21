@@ -99,7 +99,8 @@ int init_idt(){
     i86_install_ir(30, create_descriptor(isr30_handler));
     i86_install_ir(31, create_descriptor(isr31_handler));
     
-    i86_install_ir(32, create_descriptor(isr19_handler)); // just a fake for check
+    // PIT
+    i86_install_ir(32, create_descriptor(isr32_handler));
 
     for (int i = 33; i < 256; i++){
         i86_install_ir(i, create_descriptor(isr80_handler));

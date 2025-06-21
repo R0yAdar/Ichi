@@ -1,6 +1,7 @@
 #include "core/graphics/vga.h"
 #include "core/interrupts/idt.h"
 #include "core/interrupts/x86_pic.h"
+#include "core/interrupts/x86_pit.h"
 
 
 #define ARRAY_SIZE(arr) ((int)sizeof(arr) / (int)sizeof((arr)[0]))
@@ -16,14 +17,15 @@ void _start_kernel(void) {
 
 	const char loading_message[] = "Ichi kernel loading...";
 	const char configured_pic_message[] = "Ichi kernel enabled PIC...";
+	const char enabled_pit_message[] = "Ichi kernel enabled PIT...";
 
 	vga_text_input input  = {0, 0, loading_message, 0x09};
 	vga_put(&input);
 
 	input.text = configured_pic_message;
 	++input.y;
- 
 	vga_put(&input);
+
 	init_idt();
 
 	systemCall(0, 0);
@@ -33,6 +35,12 @@ void _start_kernel(void) {
 	// int b = a / 0;
 
 	init_pic();
+	init_pit();
 	
 	asm volatile ("sti" ::: "memory");
+
+	input.text = enabled_pit_message;
+	++input.y;
+	vga_put(&input);
+
 }

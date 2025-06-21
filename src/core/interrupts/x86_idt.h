@@ -33,7 +33,11 @@ extern void isr29_handler();  // VMM Communication Exception
 extern void isr30_handler();  // Security Exception
 extern void isr31_handler();  // Reserved
 
+// PIC
 
+extern void isr32_handler();  // PIT
+
+// Custom
 
 extern void isr80_handler();
 

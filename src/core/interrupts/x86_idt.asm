@@ -28,6 +28,7 @@ align 16
 %macro define_isr_handler 2
     global %1
     %1:
+    cli
 
     pushall
 
@@ -40,6 +41,25 @@ align 16
     call %2
 
     popall
+    sti
+
+    iretq
+%endmacro
+
+%macro define_irq_handler 2
+    global %1
+    %1:
+    cli
+
+    pushall
+
+    cld
+
+    extern %2
+    call %2
+
+    popall
+    sti
 
     iretq
 %endmacro
@@ -47,6 +67,7 @@ align 16
 %macro define_exception_handler 3
     global %1
     %1:
+    cli
 
     mov rax, %3
 
@@ -61,6 +82,7 @@ align 16
     call %2
 
     popall
+    sti
 
     iretq
 %endmacro
@@ -100,7 +122,8 @@ define_exception_handler isr30_handler, general_exception_handler, 30
 define_exception_handler isr31_handler, general_exception_handler, 31
 
 
-; External Devices ISRs
+; External Devices ISRs (PIC)
+define_irq_handler isr32_handler, pit_irq_handler
 
 ; Custom ISRs
 define_isr_handler isr80_handler, sysCallC
